@@ -1,4 +1,4 @@
-## Traceroute clone
+## 辿る: Traceroute clone
 
 ### To compile
 ```bash
