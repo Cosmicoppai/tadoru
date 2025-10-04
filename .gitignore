@@ -1,0 +1,8 @@
+/build/
+/CMakeFiles/
+/CMakeCache.txt
+/*.o
+/*.obj
+/*.exe
+
+/.idea/
