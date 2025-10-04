@@ -2,7 +2,7 @@
 
 ### To compile
 ```bash
-cmake --build .
+cmake .. && cmake --build .
 // or
 gcc main.c -o tadoru
 ```
