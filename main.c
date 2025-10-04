@@ -43,7 +43,9 @@ int main(int argc, char *argv[]) {
 	}
 
 	char *server_name = argv[1];
-	char server_port[] = "50000";
+	// I initially kept this 50000, but the success rate wasn't good enough,
+	// so I kept it same as traceroute default port, looks like more fw allows traffic on it
+	char server_port[] = "33434";
 	struct addrinfo *server_addr_info;
 
 	int status = get_udp_address(server_name, server_port, &server_addr_info);
@@ -83,7 +85,7 @@ int main(int argc, char *argv[]) {
 		FD_ZERO(&readfds);
 		FD_SET(socket_fd, &readfds);
 
-		tv.tv_sec = 3;
+		tv.tv_sec = 2;
 		tv.tv_usec = 0;
 
 		sendto(socket_fd, msg, strlen(msg), 0, server_addr_info->ai_addr, server_addr_info->ai_addrlen);
