@@ -126,8 +126,8 @@ int main(int argc, char *argv[]) {
 							if ( err_msg->ee_type == ICMP_TIME_EXCEEDED) {
 								printf("%d: %s\n", hop, ip_str);
 							} else if ( err_msg->ee_type == ICMP_UNREACH) {
-								printf("%d: %s\n", hop, ip_str);
-								break;
+								printf("%d: Dest reached: %s\n", hop, ip_str);
+								return 0;
 							}
 						}
 					}
