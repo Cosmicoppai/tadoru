@@ -92,30 +92,30 @@ int main(int argc, char *argv[]) {
 
 		if ( ret > 0 && FD_ISSET(socket_fd, &readfds) ) {
 			
-			struct msghdr msg = {0};
+			struct msghdr resp_msg = {0};
 			struct iovec iov;
 			struct sockaddr_in sender_addr; // for remote addr
 			
 			iov.iov_base = recv_buffer;  // to store the data
 			iov.iov_len = sizeof(recv_buffer) - 1;
 
-			msg.msg_name = &sender_addr;  // to store the ip and other info of the sender
-			msg.msg_namelen = sizeof(sender_addr);
-			msg.msg_iov = &iov;
-			msg.msg_iovlen = 1;
+			resp_msg.msg_name = &sender_addr;  // to store the ip and other info of the sender
+			resp_msg.msg_namelen = sizeof(sender_addr);
+			resp_msg.msg_iov = &iov;
+			resp_msg.msg_iovlen = 1;
 
 			char control_buffer[512];  // to store the errors
-			msg.msg_control = control_buffer;
-			msg.msg_controllen = sizeof(control_buffer);
+			resp_msg.msg_control = control_buffer;
+			resp_msg.msg_controllen = sizeof(control_buffer);
 
-			ssize_t bytes_read = recvmsg(socket_fd, &msg, MSG_ERRQUEUE);
+			ssize_t bytes_read = recvmsg(socket_fd, &resp_msg, MSG_ERRQUEUE);
 			if (bytes_read < 0) {
 				perror("recvmsg");
 			}
 			struct cmsghdr *cmsg;
-				for (cmsg = CMSG_FIRSTHDR(&msg); cmsg != NULL; cmsg = CMSG_NXTHDR(&msg, cmsg)) {
+				for (cmsg = CMSG_FIRSTHDR(&resp_msg); cmsg != NULL; cmsg = CMSG_NXTHDR(&resp_msg, cmsg)) {
 
-					// checking message level is ipv4 and
+					// checking message level is ipv4 and type is error
 					if ( cmsg->cmsg_level == SOL_IP && cmsg->cmsg_type == IP_RECVERR) {
 						struct sock_extended_err *err_msg = (struct sock_extended_err *)CMSG_DATA(cmsg);
 						if ( err_msg->ee_origin == SO_EE_ORIGIN_ICMP ) {
